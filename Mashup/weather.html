@@ -1,0 +1,127 @@
+<!DOCTYPE html>                    
+<head>
+<title>ข้อมูลสภาพอากาศ</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<link rel="stylesheet" href="css/bootstrap.min.css" >
+<link rel="stylesheet" href="css/bootstrap-theme.min.css" >
+<script src="js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+ 
+
+  
+  <script>
+  
+  
+    $(document).ready(function(){
+    
+    
+    var dataget;
+    
+          $.ajax({
+   url: 'getxml.php',
+   data: {
+      format: 'json'
+   },
+   error: function() {
+      alert("ไม่สามารถดึงข้อมูลได้");
+   },
+   dataType: 'json',
+   success: function(data) {
+   
+    
+    // console.log(data.Stations[0]);
+   
+   dataget = data.Stations;
+   var indexselect = 0;
+                var newhtml = '';
+                newhtml += '<p>สถานนีรายงานอากาศ : '+dataget[indexselect]['StationNameTh']+'</p>';
+                newhtml += '<p>จังหวัด : '+dataget[indexselect]['Province']+'</p>';
+                newhtml += '<p>ละติจดู (N)  : '+dataget[indexselect]['Latitude'].Value+'</p>';
+                newhtml += '<p>ลองติจูด(E)  : '+dataget[indexselect]['Longitude'].Value+'</p>';
+                newhtml += '<p>วันที่ตรวจวัด  : '+dataget[indexselect]['Observe'].Time+'</p>';
+               newhtml += '<p>อุณหภูมอากาศป ิ ัจจุบัน(องศาเซลซียส)  : '+dataget[indexselect]['Observe']['Temperature'].Value+'</p>';
+               newhtml += '<p>อุณหภูมสิูงสุดใน24ชม.ที่ผ่านมา(องศาเซลซียส)   : '+dataget[indexselect]['Observe']['MaxTemperature'].Value+'</p>';
+              newhtml += '<p>อุณหภูมติ่ําสดใน ุ 24ชม.ที่ผ่านมา(องศาเซลซียส)   : '+dataget[indexselect]['Observe']['MinTemperature'].Value+'</p>';
+               newhtml += '<p> ค่าเฉลี่ยความชื้นสัมพทธั ์(เปอร์เซ็นต์)    : '+dataget[indexselect]['Observe']['RelativeHumidity'].Value+'</p>';
+                
+                
+                $("#preview").html(newhtml);
+   
+   
+   
+     $.each(data.Stations,function(i){
+                   
+                             
+    $("#plist").append('<option value="'+i+'">'+data.Stations[i]['StationNameTh']+'</option>');
+              
+              $("#plist").on('change', function() {
+              
+              //console.log($(this).val());
+                var indexselect =  $(this).val();
+                console.log(dataget[indexselect]['StationNameTh']);
+                
+                var newhtml = '';
+                newhtml += '<p>สถานนีรายงานอากาศ : '+dataget[indexselect]['StationNameTh']+'</p>';
+                newhtml += '<p>จังหวัด : '+dataget[indexselect]['Province']+'</p>';
+                newhtml += '<p>ละติจดู (N)  : '+dataget[indexselect]['Latitude'].Value+'</p>';
+                newhtml += '<p>ลองติจูด(E)  : '+dataget[indexselect]['Longitude'].Value+'</p>';
+                newhtml += '<p>วันที่ตรวจวัด  : '+dataget[indexselect]['Observe'].Time+'</p>';
+               newhtml += '<p>อุณหภูมอากาศป ิ ัจจุบัน(องศาเซลซียส)  : '+dataget[indexselect]['Observe']['Temperature'].Value+'</p>';
+               newhtml += '<p>อุณหภูมสิูงสุดใน24ชม.ที่ผ่านมา(องศาเซลซียส)   : '+dataget[indexselect]['Observe']['MaxTemperature'].Value+'</p>';
+              newhtml += '<p>อุณหภูมติ่ําสดใน ุ 24ชม.ที่ผ่านมา(องศาเซลซียส)   : '+dataget[indexselect]['Observe']['MinTemperature'].Value+'</p>';
+               newhtml += '<p> ค่าเฉลี่ยความชื้นสัมพทธั ์(เปอร์เซ็นต์)    : '+dataget[indexselect]['Observe']['RelativeHumidity'].Value+'</p>';
+                
+                
+                $("#preview").html(newhtml);
+              
+              });     
+                   
+  });
+   
+   },
+   type: 'GET'
+});
+
+
+
+
+
+
+   });
+
+  </script>
+  
+</head>  
+
+       <div class="container" style="padding:25px;">
+   <div class="row">
+
+   <h3>สภาพอากาศประเทศไทยวันนี้</h3>
+     <div class="form-group">
+  <label for="sel1">กรุณาเลือกสถานที่</label>
+  <select class="form-control" id="plist">
+    
+  </select>
+</div>
+
+   </div>
+   
+    <div class="row">
+    
+    <div id="preview">
+       
+      </div>
+    </div>
+  
+  </div>
+
+</body>
+    
+</html>
+    
